@@ -16,4 +16,4 @@ deploy:
   provider: heroku
   app: decide-stats-visualizer
   strategy: git
-  api_key: 61e3e1ba-023e-42e3-89cf-867077b94b83
+  api_key: $HEROKU_API_KEY
