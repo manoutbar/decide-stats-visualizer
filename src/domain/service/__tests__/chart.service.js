@@ -32,7 +32,7 @@ describe('Chart service tests', () => {
     const repo = new VotingRepository();
     repo.listVotings.mockReturnValue(VOTINGS_SAMPLE_DATA.map(d => new Voting(d)));
 
-    const [ startDate, endDate ] = [ '2021-12-08T00:00:00.000+01:00', '2021-12-11T00:00:00.000+01:00'];
+    const [ startDate, endDate ] = [ '2021-12-08T01:00:00.000+00:00', '2021-12-11T01:00:00.000+00:00'];
     
     const chartService = createInstance(repo);
     
@@ -41,7 +41,7 @@ describe('Chart service tests', () => {
     expect(repo.listVotings).toHaveBeenCalledTimes(1);
 
     expect(result.votings).toHaveLength(1)
-    expect(result.dates).toHaveLength(3);
+    expect(result.dates).toHaveLength(4);
 
     expect(result.dates[0].votings).toHaveLength(0);
     expect(result.dates[1].votings).toHaveLength(1);
