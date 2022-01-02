@@ -17,31 +17,42 @@ function* months(interval) {
   }
 }
 
-function fromInterval(key, start, end) {
-  const startDate = DateTime.fromISO(start);
-  const endDate = DateTime.fromISO(end);
+function dateInstances(start, end) {
+  return [
+    DateTime.fromISO(start),
+    DateTime.fromISO(end),
+  ]
+}
 
-  const interval = Interval.fromDateTimes(startDate, endDate);
+function fromInterval(start, end) {
+  if (end < start)
+    throw new Error('end must be greater than start')
 
-  switch(key) {
-    case 'days': 
-      return Array.from(days(interval))
-    case 'months':
-      return Array.from(months(interval)) 
-  }
+  return Interval.fromDateTimes(start, end);  
 }
 
 export default class TimeUtil {
 
   static timeBetweenInterval(unit, start, end) {
-    return fromInterval(unit, start, end);
+    switch(unit) {
+      case 'months':
+        return TimeUtil.monthsBetweenInterval(start, end);
+      case 'days': 
+      default:
+        return TimeUtil.daysBetweenInterval(start, end);
+    }
   }
 
   static daysBetweenInterval(start, end) {
-    return fromInterval('days', start, end);
+    const [startDate, endDate] = dateInstances(start, end);
+    const interval = fromInterval(startDate, endDate);
+    return Array.from(days(interval))
   }
 
   static monthsBetweenInterval(start, end) {
-    return fromInterval('months', start, end);
+    const [startDate, endDate] = dateInstances(start, end).map(d => d.startOf('month'));
+
+    const interval = fromInterval(startDate, endDate);
+    return Array.from(months(interval)) 
   }
 }
