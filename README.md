@@ -1,5 +1,6 @@
 # Decide - Stats Visualizer
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c73de79a06d14f019ba7850d794132cb)](https://app.codacy.com/gh/manoutbar/decide-stats-visualizer?utm_source=github.com&utm_medium=referral&utm_content=manoutbar/decide-stats-visualizer&utm_campaign=Badge_Grade_Settings)
 [![Build Status](https://travis-ci.com/manoutbar/decide-stats-visualizer.svg?branch=master)](https://travis-ci.com/manoutbar/decide-stats-visualizer)
 
 Development repository
