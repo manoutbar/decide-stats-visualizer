@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Page xmlns:Charts="using:DevExpress.UI.Xaml.Charts" 
+    x:Class="PieChartLesson.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="using:PieChartLesson">
+
+    <Page.Resources>
+        <local:MyConverter x:Key="converter"/>
+    </Page.Resources>
+
+    <Grid 
+        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Charts:PieChart >
+            <Charts:PieChart.Palette>
+                <Charts:OfficePalette/>
+            </Charts:PieChart.Palette>
+            <Charts:PieChart.Legend>
+                <Charts:Legend/>
+            </Charts:PieChart.Legend>
+            <Charts:PieChart.Series>
+                <Charts:Series 
+                    x:Name="series" 
+                    DisplayName="Area of Countries">
+                    <Charts:Series.View>
+                        <Charts:DonutSeriesView 
+                            HoleRadiusPercent="70" 
+                            LegendPointPattern="{}{A}: {VP:P}">
+                            <Charts:DonutSeriesView.Title>
+                                <Charts:SeriesTitle
+                                    Content="Area of Countries"/>
+                            </Charts:DonutSeriesView.Title>
+                        </Charts:DonutSeriesView>
+                    </Charts:Series.View>
+                    <Charts:DataPointCollection>
+                        <Charts:DataPoint 
+                            Argument="Russia" 
+                            Value="17.0752" />
+                        <Charts:DataPoint 
+                            Argument="Canada"
+                            Value="9.98467" />
+                        <Charts:DataPoint 
+                            Argument="USA" 
+                            Value="9.63142" />
+                        <Charts:DataPoint 
+                            Argument="China" 
+                            Value="9.59696" />
+                        <Charts:DataPoint 
+                            Argument="Brazil" 
+                            Value="8.511965" />
+                        <Charts:DataPoint 
+                            Argument="Australia" 
+                            Value="7.68685" />
+                        <Charts:DataPoint 
+                            Argument="India" 
+                            Value="3.28759" />
+                        <Charts:DataPoint 
+                            Argument="Others" 
+                            Value="81.2"/>
+                    </Charts:DataPointCollection>
+                </Charts:Series>
+            </Charts:PieChart.Series>
+        </Charts:PieChart>
+    </Grid>
+</Page>
