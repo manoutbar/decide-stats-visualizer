@@ -32,7 +32,7 @@ describe('Chart service tests', () => {
     const repo = new VotingRepository();
     repo.listVotings.mockReturnValue(VOTINGS_SAMPLE_DATA.map(d => new Voting(d)));
 
-    const [ startDate, endDate ] = [ '2021-12-08T00:00:00.000000Z', '2021-12-10T00:00:00.000000Z'];
+    const [ startDate, endDate ] = [ '2021-12-08T00:00:00.000+01:00', '2021-12-11T00:00:00.000+01:00'];
     
     const chartService = createInstance(repo);
     
