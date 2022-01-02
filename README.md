@@ -1,5 +1,7 @@
 # Decide - Stats Visualizer
 
+[![Build Status](https://travis-ci.com/manoutbar/decide-stats-visualizer.svg?branch=master)](https://travis-ci.com/manoutbar/decide-stats-visualizer)
+
 Development repository
 
 # Getting Started with Create React App
