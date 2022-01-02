@@ -12,6 +12,9 @@ cache:
 script:
   - npm run build
   - npm test
+branches:
+  only:
+  - master
 deploy:
   provider: heroku
   app: decide-stats-visualizer
