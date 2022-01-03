@@ -1,6 +1,5 @@
 # Decide - Stats Visualizer
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c73de79a06d14f019ba7850d794132cb)](https://app.codacy.com/gh/manoutbar/decide-stats-visualizer?utm_source=github.com&utm_medium=referral&utm_content=manoutbar/decide-stats-visualizer&utm_campaign=Badge_Grade_Settings)
 [![Build Status](https://travis-ci.com/manoutbar/decide-stats-visualizer.svg?branch=master)](https://travis-ci.com/manoutbar/decide-stats-visualizer)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/7f644c8745304f5a83ba6e09f9befbec)](https://www.codacy.com/gh/manoutbar/decide-stats-visualizer/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=manoutbar/decide-stats-visualizer&amp;utm_campaign=Badge_Grade)
 
