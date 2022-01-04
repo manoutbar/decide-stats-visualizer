@@ -7,8 +7,8 @@ import { DateTime } from 'luxon';
 import { Link } from 'react-router-dom';
 
 import ChartService from 'domain/service/locator/chart';
-import { VOTING_STATES } from 'domain/model/question.model.js';
-
+import { VOTING_STATES } from 'domain/model/voting-state.model';
+//import { VOTING_ANSWER } from 'domain/service/voting.service';
 
 import DoughnutChart from 'components/DoughnutChart';
 import TimelineChart from 'components/TimelineChart';
@@ -16,6 +16,7 @@ import DateRangePicker from 'components/DateRangePicker';
 
 import pageStyle from './style.module.scss';
 const VOTING_STATES_VALUES = Object.values(VOTING_STATES);
+//const VOTING_ANSWER_VALUES = Object.values(VOTING_ANSWER);
 
 export default function VotingDetailPage(props) {
   const [ votings, setVotings ]  = useState([]);
@@ -33,14 +34,14 @@ export default function VotingDetailPage(props) {
   const [loaded, setLoaded] = useState(false);
   ChartService.countVotingsGroupedByState()
       .then((votingsByState) => {
-        const states = VOTING_STATES_VALUES
+        const states =  VOTING_STATES_VALUES    //VOTING_STATES_VALUES
           .sort((state1, state2) => state1.name > state2.name ? 1 : -1);
         
         const data = {
-          labels: vo.map(state => state.name),
+          labels: states.map(state => state.name),
           datasets: [{
             label: 'Votings count by state',
-            data: states.map(state => votingsByState[state.code] || 0)
+            data: states.map(state => votingsByState[state.code] || 0) //data: states.map(state => votingsByState[state.code] || 0)
           }]
         }
         setVotingsByStateDataset(data);
