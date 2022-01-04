@@ -1,151 +1,118 @@
-vvar myCanvas = document.getElementById("canvas");
- 
-myCanvas.width = 300;
- 
-myCanvas.height = 300;
- 
- 
- 
-var ctx = myCanvas.getContext("2d");
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from "react-router-dom";
+import PageTitle from 'components/PageTitle';
+import { Card, CardContent, Typography, Grid, Box } from '@mui/material';
+import VotingService from 'domain/service/locator/voting';
+import { DateTime } from 'luxon';
+import { Link } from 'react-router-dom';
 
-function drawLine(ctx, startX, startY, endX, endY){
- 
-    ctx.beginPath();
- 
-    ctx.moveTo(startX,startY);
- 
-    ctx.lineTo(endX,endY);
- 
-    ctx.stroke();
- 
-}
+import ChartService from 'domain/service/locator/chart';
+import { VOTING_STATES } from 'domain/model/question.model.js';
 
-function drawArc(ctx, centerX, centerY, radius, startAngle, endAngle){
- 
-    ctx.beginPath();
- 
-    ctx.arc(centerX, centerY, radius, startAngle, endAngle);
- 
-    ctx.stroke();
- 
-}
 
-function drawPieSlice(ctx,centerX, centerY, radius, startAngle, endAngle, color ){
- 
-    ctx.fillStyle = color;
- 
-    ctx.beginPath();
- 
-    ctx.moveTo(centerX,centerY);
- 
-    ctx.arc(centerX, centerY, radius, startAngle, endAngle);
- 
-    ctx.closePath();
- 
-    ctx.fill();
- 
-}
+import DoughnutChart from 'components/DoughnutChart';
+import TimelineChart from 'components/TimelineChart';
+import DateRangePicker from 'components/DateRangePicker';
 
-var myVinyls = {
- 
-    "Classical music": 10,
- 
-    "Alternative rock": 14,
- 
-    "Pop": 2,
- 
-    "Jazz": 12
- 
-};
+import pageStyle from './style.module.scss';
+const VOTING_STATES_VALUES = Object.values(VOTING_STATES);
 
-var Piechart = function(options){
- 
-    this.options = options;
- 
-    this.canvas = options.canvas;
- 
-    this.ctx = this.canvas.getContext("2d");
- 
-    this.colors = options.colors;
- 
- 
- 
-    this.draw = function(){
- 
-        var total_value = 0;
- 
-        var color_index = 0;
- 
-        for (var categ in this.options.data){
- 
-            var val = this.options.data[categ];
- 
-            total_value += val;
- 
+export default function VotingDetailPage(props) {
+  const [ votings, setVotings ]  = useState([]);
+  const [ votingsByStateDataset, setVotingsByStateDataset ]  = useState(null);
+  const [ activeVotingsTimeInterval, setActiveVotingsTimeInterval ] = useState([
+    DateTime.local().startOf('week').toISO(),
+    DateTime.local().endOf('week').toISO(),
+  ]);
+  const [ activeVotingsByDate, setActiveVotingsByDate ]  = useState(null);
+
+  const navigate = useNavigate();
+  const params = useParams();
+
+  const [voting, setVoting] = useState(null);
+  const [loaded, setLoaded] = useState(false);
+  ChartService.countVotingsGroupedByState()
+      .then((votingsByState) => {
+        const states = VOTING_STATES_VALUES
+          .sort((state1, state2) => state1.name > state2.name ? 1 : -1);
+        
+        const data = {
+          labels: vo.map(state => state.name),
+          datasets: [{
+            label: 'Votings count by state',
+            data: states.map(state => votingsByState[state.code] || 0)
+          }]
         }
- 
- 
- 
-        var start_angle = 0;
- 
-        for (categ in this.options.data){
- 
-            val = this.options.data[categ];
- 
-            var slice_angle = 2 * Math.PI * val / total_value;
- 
- 
- 
-            drawPieSlice(
- 
-                this.ctx,
- 
-                this.canvas.width/2,
- 
-                this.canvas.height/2,
- 
-                Math.min(this.canvas.width/2,this.canvas.height/2),
- 
-                start_angle,
- 
-                start_angle+slice_angle,
- 
-                this.colors[color_index%this.colors.length]
- 
-            );
- 
- 
- 
-            start_angle += slice_angle;
- 
-            color_index++;
- 
+        setVotingsByStateDataset(data);
+      })
+      .catch(err => console.error('error getting votings by state', err));      
+
+      useEffect(() => {
+    ChartService.activeVotingsByDate(activeVotingsTimeInterval[0], activeVotingsTimeInterval[1])
+      .then((activeVotingsData) => {
+        // const today = DateTime.local();
+        const data = {
+          labels: activeVotingsData.dates.map(voting => DateTime.fromISO(voting.date).toFormat('dd/MM/yyyy')),
+          datasets: activeVotingsData.votings.map((voting, i) => ({
+            label: voting.name,
+            fill: 'origin',
+            data: activeVotingsData.dates
+              // .filter(dateData => DateTime.fromISO(dateData.date) <= today)
+              .map(dateData => {
+                const idx = dateData.votings.findIndex(v => v.id === voting.id);
+                  return idx === -1 ? 0 : dateData.votings.length - idx;
+              })
+          }))
         }
- 
- 
- 
-    }
+        setActiveVotingsByDate(data);
+      })
+      .catch(err => console.error('error getting votings by state', err));
+  }, [ activeVotingsTimeInterval ])
+
+  useEffect(() => {
+    VotingService.findById(params.votingId)
+      .then(voting => setVoting(voting))
+      .catch(err => console.error(`error getting voting with id ${params.votingId}`, err))
+      .then(() => setLoaded(true));
+    }, [])
     
-    var myPiechart = new Piechart(
- 
-    {
- 
-        canvas:myCanvas,
- 
-        data:myVinyls,
- 
-        colors:["#fde23e","#f16e23", "#57d9ff","#937e88"]
- 
-    }
- 
-);
- 
-myPiechart.draw();
- 
-}
+  
+  return (<>
+    <PageTitle 
+      onBackButtonClick={ () => navigate('/') }
+      style={{ marginTop: '1rem' }}
+    >Voting detail page</PageTitle>
 
-drawLine(ctx,100,100,200,200);
- 
-drawArc(ctx, 150,150,150, 0, Math.PI/3);
- 
-drawPieSlice(ctx, 150,150,150, Math.PI/2, Math.PI/2 + Math.PI/4, '#ff0000');
+    { (loaded && voting != null)
+      ? (
+      <Grid container spacing={2} style={{ marginTop: '1rem' }}>
+        <Grid item xs={12} md={6}>
+          <Card>
+            <CardContent>
+              <Typography sx={{ fontSize: 18 }} color="text.primary" gutterBottom>
+                { voting.name }
+              </Typography>
+              { voting.state.name }
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          CHARTS SECTION
+          <Card>
+            <CardContent>
+              <DoughnutChart {...votingsByStateDataset} />
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12}>
+          Census and voters data
+        </Grid>
+      </Grid> )
+      : ( /** not found *******************************/
+      <Typography sx={{ fontSize: 16 }} color="text.primary" gutterBottom>
+        No se ha encontrado ninguna votación con ID { params.votingId }
+      </Typography>
+      )
+    }
+  </>);
+}
