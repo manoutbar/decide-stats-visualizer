@@ -37,11 +37,11 @@ export default function VotingListPage() {
   ]);
   const [ activeVotingsByDate, setActiveVotingsByDate ]  = useState(null);
   const query= useQuery();
-  const start=query.get('start');
-  const itemsPage=query.get('itemsPerPage');
+  const start=query.get('start')|| 1;
+  const itemsPage=10;//Modificar
   useEffect(() => {
     const startInt = parseInt(start || '0', 10);
-    VotingService.findAll(startInt,2)
+    VotingService.findAll(startInt-1,itemsPage)
       .then(votings => setVotings(votings))
       .catch(err => console.error('error getting votings', err));
   },[start])
@@ -85,6 +85,7 @@ export default function VotingListPage() {
       .catch(err => console.error('error getting votings by state', err));
   }, [ activeVotingsTimeInterval ])
 
+//Si es 0 dejarlo a uno en otro caso eso
 
   return (<>
     <PageTitle
@@ -107,13 +108,13 @@ export default function VotingListPage() {
           ))
         }
   <Pagination
-            page={(((start-1)/itemsPage)+1).parseInt}
+            page={Math.ceil((((start-1)/itemsPage)+1))}
 
-            count={Math.ceil(votings.total / 2)}
+            count={Math.ceil(votings.total / itemsPage)}
             renderItem={(item) => (
               <PaginationItem
                 component={Link}
-                to={`/${start === 1 ? '' : `?start=${start}`}`}
+                to={`/${item.page === 1 ? '' : `?start=${(item.page)*itemsPage}`}`}
                 {...item}
               />
             )}
