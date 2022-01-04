@@ -36,7 +36,7 @@ export default function DoughnutChart({ labels, datasets }) {
   }));
 
   const plugins = {
-    legend: { ... DEFAULT_LEGEND_PLUGIN_OPTIONS },
+    legend: { ...DEFAULT_LEGEND_PLUGIN_OPTIONS },
     title: { ...DEFAULT_TITLE_PLUGIN_OPTINS },
   };
 

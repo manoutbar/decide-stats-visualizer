@@ -92,7 +92,7 @@ export default function TimelineChart({ labels, datasets, title }) {
   }));
 
   const plugins = {
-    legend: { ... DEFAULT_LEGEND_PLUGIN_OPTIONS },
+    legend: { ...DEFAULT_LEGEND_PLUGIN_OPTIONS },
     title: { ...DEFAULT_TITLE_PLUGIN_OPTINS },
   }
 

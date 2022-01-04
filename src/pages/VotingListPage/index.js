@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DateTime } from 'luxon';
 import { Card, CardContent, Typography, Grid, Box } from '@mui/material';
-import { Link } from 'react-router-dom';
+
 
 import VotingService from 'domain/service/locator/voting';
 import ChartService from 'domain/service/locator/chart';
@@ -13,24 +13,39 @@ import TimelineChart from 'components/TimelineChart';
 import DateRangePicker from 'components/DateRangePicker';
 
 import pageStyle from './style.module.scss';
+//Paginacion
 
-const VOTING_STATES_VALUES = Object.values(VOTING_STATES);
+import { Link, useLocation } from 'react-router-dom';
+import Pagination from '@mui/material/Pagination';
+import PaginationItem from '@mui/material/PaginationItem';
+
+
+
+function useQuery() {
+  const { search } = useLocation();
+  return React.useMemo(() => new URLSearchParams(search), [search]);
+}
+  const VOTING_STATES_VALUES = Object.values(VOTING_STATES);
 
 export default function VotingListPage() {
 
-  const [ votings, setVotings ]  = useState([]);
+  const [ votings, setVotings ]  = useState({list:[], total: 0});
   const [ votingsByStateDataset, setVotingsByStateDataset ]  = useState(null);
   const [ activeVotingsTimeInterval, setActiveVotingsTimeInterval ] = useState([
     DateTime.local().startOf('week').toISO(),
     DateTime.local().endOf('week').toISO(),
   ]);
   const [ activeVotingsByDate, setActiveVotingsByDate ]  = useState(null);
-
+  const query= useQuery();
+  const start=query.get('start');
+  const itemsPage=query.get('itemsPerPage');
   useEffect(() => {
-    VotingService.findAll()
+    const startInt = parseInt(start || '0', 10);
+    VotingService.findAll(startInt,2)
       .then(votings => setVotings(votings))
       .catch(err => console.error('error getting votings', err));
-
+  },[start])
+   useEffect(() => {
     ChartService.countVotingsGroupedByState()
       .then((votingsByState) => {
         const states = VOTING_STATES_VALUES
@@ -78,7 +93,7 @@ export default function VotingListPage() {
 
     <Grid container spacing={2}>
       <Grid item xs={12} md={6}>
-        { votings.map((voting, i) => (
+        { votings.list.map((voting, i) => (
             <Card key={ i } className={pageStyle.votingItem}>
               <CardContent>
                 <Link to={ `/voting/${voting.id}` }>
@@ -91,7 +106,24 @@ export default function VotingListPage() {
             </Card>
           ))
         }
+  <Pagination
+            page={(((start-1)/itemsPage)+1).parseInt}
+
+            count={Math.ceil(votings.total / 2)}
+            renderItem={(item) => (
+              <PaginationItem
+                component={Link}
+                to={`/${start === 1 ? '' : `?start=${start}`}`}
+                {...item}
+              />
+            )}
+          />
+
+
       </Grid>
+
+
+
       <Grid item xs={12} md={6}>
         { votingsByStateDataset != null && (
           <Card>

@@ -23,7 +23,7 @@ function fromInterval(key, start, end) {
 
   const interval = Interval.fromDateTimes(startDate, endDate);
 
-  switch(key) {
+  switch(key){
     case 'days': 
       return Array.from(days(interval))
     case 'months':
