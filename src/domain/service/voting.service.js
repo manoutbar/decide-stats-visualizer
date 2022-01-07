@@ -28,5 +28,43 @@ export default class VotingService {
 
     return group;
   }
+  
+  async VotingsByStartDate(startDate) {
+    const votings = await this._repository.listVotings();
+    const days = TimeUtil.DateTime(startDate);
+
+    return {
+      votings,
+      date: days.map((date) => ({
+        date: date.toISO(),
+        votings: votings.filter(voting => {
+          const startDate = voting.startDate != null ? DateTime.fromISO(voting.startDate).startOf('day') : null;
+          
+          const startDateAfter = startDate != null && date >= startDate;
+         
+          return startDateAfter;
+        })
+      }))
+    };
+  }
+
+  async VotingsByEndDate(endDate) {
+    const votings = await this._repository.listVotings();
+    const days = TimeUtil.DateTime(endDate);
+
+    return {
+      votings,
+      date: days.map((date) => ({
+        date: date.toISO(),
+        votings: votings.filter(voting => {
+          const endDate = voting.endDate != null ? DateTime.fromISO(voting.endDate).startOf('day') : null;
+          
+          const endDateAfter = endDate != null && date >= endDate;
+         
+          return endDateAfter;
+        })
+      }))
+    };
+  }
 
 }
