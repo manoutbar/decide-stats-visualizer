@@ -22,10 +22,7 @@ export default function DateRangePicker({ value, onChange }) {
             if (typeof onChange === 'function')
               onChange([newValue, endDate]);
           }}
-          renderInput={(params) => {
-            console.log('renderInput params', params);
-            return <TextField {...params} />;
-          }}
+          renderInput={(params) => (<TextField {...params} />) }
         />
       </Box>
       <Box>

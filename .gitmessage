@@ -1,0 +1,8 @@
+# [#<Issue>] Title (No more than 40 chars)
+# Blank line
+# Some detailed decription (not mandatory)
+# Blank line (if Co-authored section specified)
+# Co-authored-by: LastName, FirstName <email@email.com>
+
+# Remember: If you need more then 40 chars, write title as summary and describe all changes in description
+[*] *
