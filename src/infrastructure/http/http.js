@@ -1,20 +1,23 @@
+import Configuration from 'infrastructure/util/configuration';
 
 const headers = {
   'Content-Type': 'application/json'
 }
 
+const url = (path) => Configuration.DECIDE_API + path;
+
 export default class Http {
 
-  static async get(url) {
-      const response = await fetch(url, {
+  static async get(path) {
+      const response = await fetch(url(path), {
           method: 'GET',
           headers
       })
       return await response.json();
   }
 
-  static async post(url, body) {
-      const response = await fetch(url, {
+  static async post(path, body) {
+      const response = await fetch(url(path), {
           method: 'POST',
           headers,
           body
@@ -22,8 +25,8 @@ export default class Http {
       return await response.json();
   }
 
-  static async put(url, body) {
-      const response = await fetch(url, {
+  static async put(path, body) {
+      const response = await fetch(url(path), {
           method: 'PUT',
           headers,
           body
@@ -31,8 +34,8 @@ export default class Http {
       return await response.json();
   }
 
-  static async delete(url) {
-      const response = await fetch(url, {
+  static async delete(path) {
+      const response = await fetch(url(path), {
           method: 'DELETE',
           headers
       })

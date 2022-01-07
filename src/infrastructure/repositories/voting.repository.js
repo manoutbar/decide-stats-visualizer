@@ -14,14 +14,15 @@ export default class VotingRepository {
          }
     }
     async listVotings() {
-        const votings = await Http.get(`http://localhost:8000/voting/`);
-        const list=votings instanceof Array ? votings :[]//Si es list usa voting, si no crea una lista vacia 
-        return  list.map(voting => new Voting(voting));
-  
+        const votings = await Http.get('/voting/');
+
+        return votings instanceof Array
+          ? (votings.map(voting => new Voting(voting)))
+          : [];
     }
 
     async getVoting(id) {
-        const votings = await Http.get(`http://localhost:8000/voting/?id=${id}`);
+        const votings = await Http.get(`/voting/?id=${id}`);
         const numId = parseInt(id);
 
         const votingData = (votings || []).find(voting => voting.id === numId);

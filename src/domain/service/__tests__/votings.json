@@ -1,0 +1,53 @@
+[
+  {
+      "id": 1,
+      "name": "Sample mocked voting",
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc tristique lorem sit amet dictum pharetra. Ut vestibulum nulla accumsan purus luctus, a dapibus turpis posuere. Suspendisse potenti. Curabitur dapibus, justo at dignissim ultricies, massa tellus faucibus tortor, et congue nulla libero vitae quam. Nunc maximus justo id eros accumsan ultricies. Suspendisse vel metus porttitor, porttitor mi vel, consectetur justo. Nunc sed ultricies neque. In hac habitasse platea dictumst. In vel tellus nec justo convallis vehicula. Nunc volutpat feugiat tortor, et eleifend neque sollicitudin at. Nam dui ex, sagittis vel neque et, varius faucibus lacus. In hac habitasse platea dictumst. Vestibulum tortor elit, congue a lacus vel, vehicula hendrerit ante. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.",
+      "question": {
+          "desc": "Sample mocked question",
+          "options": [
+              {
+                  "number": 1,
+                  "option": "First mocked option"
+              },
+              {
+                  "number": 2,
+                  "option": "Second mocked option"
+              },
+              {
+                  "number": 3,
+                  "option": "Third mocked option"
+              }
+          ]
+      },
+      "start_date": "2021-12-09T11:59:55.044800Z",
+      "end_date": "2021-12-09T12:01:23.653439Z",
+      "auths": [
+          {
+              "name": "test",
+              "url": "http://0.0.0.0",
+              "me": true
+          }
+      ],
+      "postproc": [
+          {
+              "votes": 10,
+              "number": 1,
+              "option": "First mocked option",
+              "postproc": 1
+          },
+          {
+              "votes": 4,
+              "number": 2,
+              "option": "Second mocked option",
+              "postproc": 0
+          },
+          {
+              "votes": 6,
+              "number": 3,
+              "option": "Third mocked option",
+              "postproc": 0
+          }
+      ]
+  }
+]
