@@ -53,9 +53,27 @@ describe('Voting service tests', () => {
     expect(repo.listVotings).toHaveBeenCalledTimes(1);
     expect(result).toMatchObject({ FINISHED: 1 })
   })
-  test('Pagination 10 votings', async () => {
+  test('Pagination 10 votings, 1 page', async () => {
     const repo = new VotingRepository();
     repo.listVotings.mockReturnValue(Array.from({ length: 10}, (_, i) => {
+      const voting = VOTINGS_SAMPLE_DATA[0];
+      voting.id = (i + 1);
+      return new Voting(voting);
+   }));
+
+  })
+  test('Pagination 20 votings, 2 pages', async () => {
+    const repo = new VotingRepository();
+    repo.listVotings.mockReturnValue(Array.from({ length: 20}, (_, i) => {
+      const voting = VOTINGS_SAMPLE_DATA[0];
+      voting.id = (i + 1);
+      return new Voting(voting);
+   }));
+
+  })
+  test('Pagination 30 votings, 3 pages', async () => {
+    const repo = new VotingRepository();
+    repo.listVotings.mockReturnValue(Array.from({ length: 30}, (_, i) => {
       const voting = VOTINGS_SAMPLE_DATA[0];
       voting.id = (i + 1);
       return new Voting(voting);
