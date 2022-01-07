@@ -33,7 +33,7 @@ export default function VotingDetailPage(props) {
       .then(voting => setVoting(voting))
       .catch(err => console.error(`error getting voting with id ${params.votingId}`, err))
       .then(() => setLoaded(true));
-    }, [])
+    }, [params.votingId])
     
     
   return (<>
