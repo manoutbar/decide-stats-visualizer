@@ -80,4 +80,22 @@ describe('Voting service tests', () => {
    }));
 
   })
+  test('Pagination 5 votings, 1 page', async () => {
+    const repo = new VotingRepository();
+    repo.listVotings.mockReturnValue(Array.from({ length: 5}, (_, i) => {
+      const voting = VOTINGS_SAMPLE_DATA[0];
+      voting.id = (i + 1);
+      return new Voting(voting);
+   }));
+
+  })
+  test('Pagination 0 votings, 0 page', async () => {
+    const repo = new VotingRepository();
+    repo.listVotings.mockReturnValue(Array.from({ length: 0}, (_, i) => {
+      const voting = VOTINGS_SAMPLE_DATA[0];
+      voting.id = (i + 1);
+      return new Voting(voting);
+   }));
+
+  })
 });
