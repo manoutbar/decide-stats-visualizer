@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import PageTitle from 'components/PageTitle';
-import { Card, CardContent, Typography, Grid, Paper, Box, Avatar } from '@mui/material';
+import { Card, CardContent, Typography, Grid, Paper, Avatar } from '@mui/material';
 import VotingService from 'domain/service/locator/voting';
 import ChartService from 'domain/service/locator/chart';
 import BarChart from 'components/BarChart';
@@ -24,6 +24,7 @@ export default function VotingDetailPage(props) {
       .catch(err => console.error(`error getting voting with id ${params.votingId}`, err))
       .then(() => setLoaded(true));
 
+
     ChartService.countVotesByOptions(params.votingId)
       .then((votingResultCount) => {
         const labels = votingResultCount.map((v) => v.name);
@@ -37,6 +38,7 @@ export default function VotingDetailPage(props) {
         setVotingResultCount(data);
       })
   }, [])
+
 
 
 

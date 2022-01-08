@@ -1,5 +1,8 @@
 # Decide - Stats Visualizer
 
+[![Build Status](https://travis-ci.com/manoutbar/decide-stats-visualizer.svg?branch=master)](https://travis-ci.com/manoutbar/decide-stats-visualizer)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/7f644c8745304f5a83ba6e09f9befbec)](https://www.codacy.com/gh/manoutbar/decide-stats-visualizer/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=manoutbar/decide-stats-visualizer&amp;utm_campaign=Badge_Grade)
+
 Development repository
 
 # Getting Started with Create React App
