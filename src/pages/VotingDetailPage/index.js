@@ -72,7 +72,7 @@ export default function VotingDetailPage(props) {
           Census and voters data
         </Grid>
       </Grid> )
-      : ( /** not found *******************************/
+      : ( /** si no se encuentra:*******************************/
       <Typography sx={{ fontSize: 16 }} color="text.primary" gutterBottom>
         No se ha encontrado ninguna votación con ID { params.votingId }
       </Typography>
