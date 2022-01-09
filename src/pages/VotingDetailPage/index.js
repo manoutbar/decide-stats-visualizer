@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 
 import ChartService from 'domain/service/locator/chart';
 import { VOTING_STATES } from 'domain/model/voting-state.model';
+
 //import { VOTING_ANSWER } from 'domain/service/voting.service';
 
 import DoughnutChart from 'components/DoughnutChart';
@@ -21,6 +22,7 @@ const VOTING_STATES_VALUES = Object.values(VOTING_STATES);
 export default function VotingDetailPage(props) {
   const [ votings, setVotings ]  = useState([]);
   const [ votingsByStateDataset, setVotingsByStateDataset ]  = useState(null);
+  const [votingResult] = useState(null)
   const [ activeVotingsTimeInterval, setActiveVotingsTimeInterval ] = useState([
     DateTime.local().startOf('week').toISO(),
     DateTime.local().endOf('week').toISO(),
@@ -29,9 +31,10 @@ export default function VotingDetailPage(props) {
 
   const navigate = useNavigate();
   const params = useParams();
-
+  const countVotesByOptions = useState(null);
   const [voting, setVoting] = useState(null);
   const [loaded, setLoaded] = useState(false);
+  const [votingResultCount, setVotingResultCount] = useState(null);
   ChartService.countVotingsGroupedByState()
       .then((votingsByState) => {
         const states =  VOTING_STATES_VALUES    //VOTING_STATES_VALUES
@@ -75,8 +78,34 @@ export default function VotingDetailPage(props) {
       .then(voting => setVoting(voting))
       .catch(err => console.error(`error getting voting with id ${params.votingId}`, err))
       .then(() => setLoaded(true));
-    }, [params.votingId])
     
+
+    ChartService.countVotesByOptions(params.votingId)
+      .then((votingResultCount) => {
+        const labels = votingResultCount.map((v) => v.name);
+        const data = {
+          labels: labels,
+          datasets:[{
+            label: 'Votos',
+            data: votingResultCount.map(v => v.votes)
+          }]
+        }
+        setVotingResultCount(data);
+      })
+  }, [])
+    
+  countVotesByOptions = ChartService.countVotesByOptions(params.votingId)
+  .then((votingResultCount) => {
+    const labels = votingResultCount.map((v) => v.name);
+    const data = {
+      labels: labels,
+      datasets:[{
+        label: 'Votos',
+        data: votingResultCount.map(v => v.votes)
+      }]
+    }
+    setVotingResultCount(data);
+  })
   
   return (<>
     <PageTitle 
@@ -101,7 +130,7 @@ export default function VotingDetailPage(props) {
           CHARTS SECTION
           <Card>
             <CardContent>
-              <DoughnutChart {...votingsByStateDataset} />
+              <DoughnutChart {...countVotesByOptions} />
             </CardContent>
           </Card>
         </Grid>
