@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import PageTitle from 'components/PageTitle';
-import { Card, CardContent, Typography, Grid, Box } from '@mui/material';
+import { Card, CardContent, Typography, Grid, Box, Paper, Avatar } from '@mui/material';
 import VotingService from 'domain/service/locator/voting';
+import ChartService from 'domain/service/locator/chart';
+import BarChart from 'components/BarChart';
 import { DateTime } from 'luxon';
 import { Link } from 'react-router-dom';
-
-import ChartService from 'domain/service/locator/chart';
 
 import DoughnutChart from 'components/DoughnutChart';
 import TimelineChart from 'components/TimelineChart';
@@ -14,28 +14,45 @@ import DateRangePicker from 'components/DateRangePicker';
 
 import pageStyle from './style.module.scss';
 
-
 export default function VotingDetailPage(props) {
   const navigate = useNavigate();
   const params = useParams();
 
   const [voting, setVoting] = useState(null);
   const [loaded, setLoaded] = useState(false);
+
+
+  const [votingResultCount, setVotingResultCount] = useState(null);
   const [ votings, setVotings ]  = useState([]);
+  const questionOptions = voting.question.options;
+  const postproc = voting.postproc;
   const [ votingsByStateDataset, setVotingsByStateDataset ]  = useState(null);
   const [ activeVotingsTimeInterval, setActiveVotingsTimeInterval ] = useState([
     DateTime.local().startOf('week').toISO(),
     DateTime.local().endOf('week').toISO(),
   ]);
   const [ activeVotingsByDate, setActiveVotingsByDate ]  = useState(null);
+
   useEffect(() => {
     VotingService.findById(params.votingId)
       .then(voting => setVoting(voting))
       .catch(err => console.error(`error getting voting with id ${params.votingId}`, err))
       .then(() => setLoaded(true));
-    }, [params.votingId])
-    
-    
+
+
+    ChartService.countVotesByOptions(params.votingId)
+      .then((votingResultCount) => {
+        const labels = votingResultCount.map((v) => v.name);
+        const data = {
+          labels: labels,
+          datasets:[{
+            label: 'Votos',
+            data: votingResultCount.map(v => v.votes)
+          }]
+        }
+        setVotingResultCount(data);
+      })
+  }, [])
   return (<>
     <PageTitle 
       onBackButtonClick={ () => navigate('/') }
@@ -57,11 +74,9 @@ export default function VotingDetailPage(props) {
             </CardContent>
           </Card>
         </Grid>
-<<<<<<< Updated upstream
-=======
         <Grid item xs={12} md={6}>
 
-          { votingResultCount != null && (
+        { votingResultCount != null && (
           <Card style={{marginTop:'10px', backgroundColor:'#fff5e6'}}>
             <CardContent>
                
@@ -98,7 +113,6 @@ export default function VotingDetailPage(props) {
             </CardContent>
           </Card>
         </Grid>
->>>>>>> Stashed changes
         <Grid item xs={12}>
           Census and voters data
           <Grid item xs={12} md={6}>

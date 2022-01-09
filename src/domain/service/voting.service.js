@@ -1,4 +1,4 @@
-
+import TimeUtil from 'infrastructure/util/time';
 export default class VotingService {
 
   constructor(repository) {
