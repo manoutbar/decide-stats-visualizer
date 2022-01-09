@@ -55,47 +55,55 @@ describe('Voting service tests', () => {
   })
   test('Pagination 10 votings, 1 page', async () => {
     const repo = new VotingRepository();
-    repo.listVotings.mockReturnValue(Array.from({ length: 10}, (_, i) => {
-      const voting = VOTINGS_SAMPLE_DATA[0];
-      voting.id = (i + 1);
-      return new Voting(voting);
-   }));
+    repo.listVotingsPaginated.mockReturnValue({
+      total: 10,
+      list: Array.from({ length: 10}, (_, i) => {
+        const voting = VOTINGS_SAMPLE_DATA[0];
+        voting.id = (i + 1);
+        return new Voting(voting);
+      })
+    });
+
+    const votingService = createInstance(repo);
+    const result = await votingService.findAll(0, 10);
+    
+    expect(repo.listVotingsPaginated).toHaveBeenCalledTimes(1);
+    expect(result.list).toHaveLength(10);
+    expect(result.total).toBe(10);
 
   })
   test('Pagination 20 votings, 2 pages', async () => {
-    const repo = new VotingRepository();
-    repo.listVotings.mockReturnValue(Array.from({ length: 20}, (_, i) => {
-      const voting = VOTINGS_SAMPLE_DATA[0];
-      voting.id = (i + 1);
-      return new Voting(voting);
-   }));
+    const repo = new VotingRepository();   
+    repo.listVotingsPaginated.mockReturnValue({
+      total: 20,
+      list: Array.from({ length: 10}, (_, i) => {
+        const voting = VOTINGS_SAMPLE_DATA[0];
+        voting.id = (i + 1);
+        return new Voting(voting);
+      })
+    });
+
+    const votingService = createInstance(repo);
+    const result = await votingService.findAll(0, 10);
+    
+    expect(repo.listVotingsPaginated).toHaveBeenCalledTimes(1);
+    expect(result.list).toHaveLength(10);
+    expect(result.total).toBe(20);
 
   })
-  test('Pagination 30 votings, 3 pages', async () => {
-    const repo = new VotingRepository();
-    repo.listVotings.mockReturnValue(Array.from({ length: 30}, (_, i) => {
-      const voting = VOTINGS_SAMPLE_DATA[0];
-      voting.id = (i + 1);
-      return new Voting(voting);
-   }));
-
-  })
-  test('Pagination 5 votings, 1 page', async () => {
-    const repo = new VotingRepository();
-    repo.listVotings.mockReturnValue(Array.from({ length: 5}, (_, i) => {
-      const voting = VOTINGS_SAMPLE_DATA[0];
-      voting.id = (i + 1);
-      return new Voting(voting);
-   }));
-
-  })
+  
   test('Pagination 0 votings, 0 page', async () => {
-    const repo = new VotingRepository();
-    repo.listVotings.mockReturnValue(Array.from({ length: 0}, (_, i) => {
-      const voting = VOTINGS_SAMPLE_DATA[0];
-      voting.id = (i + 1);
-      return new Voting(voting);
-   }));
+    const repo = new VotingRepository();   
+    repo.listVotingsPaginated.mockReturnValue({
+      total: 0,
+      list: []
+    });
 
+    const votingService = createInstance(repo);
+    const result = await votingService.findAll(0, 10);
+    
+    expect(repo.listVotingsPaginated).toHaveBeenCalledTimes(1);
+    expect(result.list).toHaveLength(0);
+    expect(result.total).toBe(0);
   })
 });
