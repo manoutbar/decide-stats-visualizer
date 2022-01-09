@@ -22,7 +22,25 @@ export default class ChartService {
 
     return group;
   }
+  async countVotesByOptions(votingId){
+    
+    const voting  = await this._repository.getVoting(votingId);
 
+    const questionOptions = voting.question.options;
+    const postproc = voting.postproc;
+
+    const votingResult = questionOptions.map((questionOption) => {
+      const postprocItem = postproc.find((pItem) => questionOption.number === pItem.number);
+      const votes = postprocItem != null ? postprocItem.votes : 0;
+      return {
+        name: questionOption.option, 
+        votes
+      }
+
+    })
+   return votingResult;
+
+  }
   async activeVotingsByDate(startDate, endDate) {
     const votings = await this._repository.listVotings();
     const daysInterval = TimeUtil.daysBetweenInterval(startDate, endDate);
