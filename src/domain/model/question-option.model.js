@@ -7,8 +7,9 @@ export default class QuestionOption {
       this.number = number;
       this.option = option;
     
+      console.log('option', option);
     }
   
-    
+   
   
 }
