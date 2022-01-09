@@ -54,4 +54,38 @@ describe('Voting service tests', () => {
     expect(result).toMatchObject({ FINISHED: 1 })
   })
 
+  test('Count votings grouped by state', async () => {
+    const repo = new VotingRepository();
+    repo.listVotings.mockReturnValue(VOTINGS_SAMPLE_DATA.map(d => new Voting(d)));
+
+    const votingService = createInstance(repo);
+    
+    const result = await votingService.countGroupedByState();
+
+    expect(repo.listVotings).toHaveBeenCalledTimes(1);
+    expect(result).toMatchObject({ FINISHED: 1 })
+  })
+
+  test('Get active votings by date', async () => {
+    const repo = new VotingRepository();
+    repo.listVotings.mockReturnValue(VOTINGS_SAMPLE_DATA.map(d => new Voting(d)));
+
+    const [ startDate, endDate ] = [ '2021-12-08T01:00:00.000+00:00', '2021-12-11T01:00:00.000+00:00'];
+    
+    const chartService = createInstance(repo);
+    
+    const result = await chartService.activeVotingsByDate(startDate, endDate);
+    
+    expect(repo.listVotings).toHaveBeenCalledTimes(1);
+
+    expect(result.votings).toHaveLength(1)
+    expect(result.dates).toHaveLength(4);
+
+    expect(result.dates[0].votings).toHaveLength(0);
+    expect(result.dates[1].votings).toHaveLength(1);
+    expect(result.dates[2].votings).toHaveLength(0);
+
+    expect(result.dates[1].votings[0]).toBeInstanceOf(Voting);
+  })
+
 });
