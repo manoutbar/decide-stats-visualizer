@@ -29,4 +29,8 @@ export default class VotingService {
     return group;
   }
 
+  async activeVotingsByDate(startDate, endDate) {
+    const votings = await this._repository.listVotings();
+    const daysInterval = TimeUtil.daysBetweenInterval(startDate, endDate);
+  }
 }
