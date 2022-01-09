@@ -5,7 +5,10 @@ export default class VotingService {
     this._repository = repository;
   }
 
-  findAll(page) {
+  findAll(start,itemsPerPage) {
+    if(typeof start === 'number' && typeof itemsPerPage === 'number'){
+      return this._repository.listVotingsPaginated(start,itemsPerPage);
+    }
     return this._repository.listVotings();
   }
 
