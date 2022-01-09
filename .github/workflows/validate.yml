@@ -1,0 +1,30 @@
+name: Application validation
+on:
+  push:
+    branches:
+      - '*'
+      - '!master'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - uses: actions/checkout@v2
+      - run: echo "Running  tests on a ${{ runner.os }} server"
+      - run: npm install
+      - run: npm test
+      - run: echo "Tests passed -> ${{ job.status }}."
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - uses: actions/checkout@v2
+      - run: npm install
+      - run: npm run build
+      - run: echo "App build -> ${{ job.status }}."
+    
