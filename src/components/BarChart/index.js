@@ -60,11 +60,6 @@ const BORDER_COLORS = [
   'rgb(127, 140, 141)',
 ];
 
-const DEFAULT_DATASET_OPTIONS = {
-  backgroundColor: (i) => AVAILABLE_COLORS[i % AVAILABLE_COLORS.length],
-  borderColor: (i) => BORDER_COLORS[i % AVAILABLE_COLORS.length],
-};
-
 const DEFAULT_LEGEND_PLUGIN_OPTIONS = {
   display: false,
   position: 'top'
@@ -75,13 +70,10 @@ const DEFAULT_TITLE_PLUGIN_OPTINS = {
   text: undefined,
 };
 
-const overrideIfUndefined = (evalValue, defaultValue) => 
-  typeof evalValue === 'undefined' ? defaultValue : evalValue;
-
 export default function BarChart({ labels, datasets, title }) {
   const dataProps = { labels };
 
-  dataProps.datasets = datasets.map((dataset, idx) => ({
+  dataProps.datasets = datasets.map((dataset) => ({
     ...dataset,
     backgroundColor: AVAILABLE_COLORS, 
     borderColor: BORDER_COLORS,
@@ -89,7 +81,7 @@ export default function BarChart({ labels, datasets, title }) {
   }));
 
   const plugins = {
-    legend: { ... DEFAULT_LEGEND_PLUGIN_OPTIONS },
+    legend: { ...DEFAULT_LEGEND_PLUGIN_OPTIONS },
     title: { ...DEFAULT_TITLE_PLUGIN_OPTINS },
   }
 
