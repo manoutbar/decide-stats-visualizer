@@ -1,3 +1,4 @@
+import DoughnutChart from 'components/DoughnutChart';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import PageTitle from 'components/PageTitle';
@@ -29,7 +30,7 @@ export default function VotingDetailPage(props) {
         const data = {
           labels: labels,
           datasets:[{
-            label: 'Votos',
+            label: 'Número de votos por opción',
             data: votingResultCount.map(v => v.votes)
           }]
         }
@@ -94,18 +95,26 @@ export default function VotingDetailPage(props) {
                           </Grid>
                         </Paper>       
                     </Grid>
+
                   ))
                 }
 
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12}>
-          Census and voters data
+        <Grid item xs={12} md={6}>
+          { votingResultCount != null && (
+          <Card style={{marginTop:'10px', backgroundColor:'#fff5e6'}}>
+            <CardContent>               
+             <DoughnutChart {...votingResultCount} title="Número de votos de cada opción" />
+            </CardContent>
+          </Card>
+          )}
         </Grid>
+       
 
       </Grid> )
-      : ( /** not found *******************************/
+      : ( /** si no se encuentra:*******************************/
       <Typography sx={{ fontSize: 16 }} color="text.primary" gutterBottom>
         No se ha encontrado ninguna votación con ID { params.votingId }
       </Typography>

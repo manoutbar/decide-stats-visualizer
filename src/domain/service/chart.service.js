@@ -22,27 +22,6 @@ export default class ChartService {
 
     return group;
   }
-
-  async activeVotingsByDate(startDate, endDate) {
-    const votings = await this._repository.listVotings();
-    const daysInterval = TimeUtil.daysBetweenInterval(startDate, endDate);
-
-    return {
-      votings,
-      dates: daysInterval.map((date) => ({
-        date: date.toISO(),
-        votings: votings.filter(voting => {
-          const startDate = voting.startDate != null ? DateTime.fromISO(voting.startDate).startOf('day') : null;
-          const endDate = voting.endDate != null ? DateTime.fromISO(voting.endDate).startOf('day') : null;
-          const startDateAfter = startDate != null && date >= startDate;
-          const endDateBefore = endDate == null || endDate >= date;
-          return startDateAfter && endDateBefore;
-        })
-      }))
-    };
-  }
-
-  
   async countVotesByOptions(votingId){
     
     const voting  = await this._repository.getVoting(votingId);
@@ -61,5 +40,42 @@ export default class ChartService {
     })
    return votingResult;
 
+  }
+  async countVotesByQuestions(votingId){
+    
+    const voting  = await this._repository.getVoting(votingId);
+
+    const question = voting.question;
+    const postproc = voting.postproc;
+
+    const votingResult = question.map((question) => {
+      const postprocItem = postproc.find((pItem) => question.number === pItem.number);
+      const votes = postprocItem != null ? postprocItem.votes : 0;
+      return {
+        name: question, 
+        votes
+      }
+
+    })
+   return votingResult;
+
+  }
+  async activeVotingsByDate(startDate, endDate) {
+    const votings = await this._repository.listVotings();
+    const daysInterval = TimeUtil.daysBetweenInterval(startDate, endDate);
+
+    return {
+      votings,
+      dates: daysInterval.map((date) => ({
+        date: date.toISO(),
+        votings: votings.filter(voting => {
+          const startDate = voting.startDate != null ? DateTime.fromISO(voting.startDate).startOf('day') : null;
+          const endDate = voting.endDate != null ? DateTime.fromISO(voting.endDate).startOf('day') : null;
+          const startDateAfter = startDate != null && date >= startDate;
+          const endDateBefore = endDate == null || endDate >= date;
+          return startDateAfter && endDateBefore;
+        })
+      }))
+    };
   }
 }
