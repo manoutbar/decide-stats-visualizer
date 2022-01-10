@@ -1,12 +1,9 @@
 import QuestionOption from "./question-option.model";
 
-
 export default class Question {
 
-  
   constructor({ desc,options}) {
     this.desc = desc;
-
     this.options = [];
 
     if (options instanceof Array){
@@ -14,13 +11,5 @@ export default class Question {
           this.options.push(new QuestionOption(option))
         });
     }
-
-
-    console.log('options', options);
-   
-  
   }
-
-  
-
 }

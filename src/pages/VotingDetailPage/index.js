@@ -14,10 +14,8 @@ export default function VotingDetailPage(props) {
   const [voting, setVoting] = useState(null);
   const [loaded, setLoaded] = useState(false);
 
-
   const [votingResultCount, setVotingResultCount] = useState(null);
   
-
   useEffect(() => {
     VotingService.findById(params.votingId)
       .then(voting => setVoting(voting))
@@ -37,7 +35,7 @@ export default function VotingDetailPage(props) {
         }
         setVotingResultCount(data);
       })
-  }, [])
+  }, [params.votingId])
 
 
 

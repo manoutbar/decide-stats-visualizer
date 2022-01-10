@@ -27,8 +27,6 @@ export default class Voting {
     if (postproc instanceof Array) {
       this.postproc = postproc.map(p => new Postproc(p))
     }
-
-    console.log('postproc',postproc);
   }
 
   setState(state) {
