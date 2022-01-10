@@ -50,4 +50,19 @@ describe('Chart service tests', () => {
     expect(result.dates[1].votings[0]).toBeInstanceOf(Voting);
   })
 
+  test('Count votes by options', async () => {
+
+    const repo = new VotingRepository();
+    repo.getVoting.mockReturnValue(new Voting(VOTINGS_SAMPLE_DATA[0]));
+
+    const chartService = createInstance(repo);
+    
+    const result = await chartService.countVotesByOptions(1);
+
+    expect(repo.listVotings).not.toHaveBeenCalled();
+    expect(repo.getVoting).toHaveBeenCalledTimes(1);
+    expect(result).toHaveLength(3);
+
+
+  })
 });
