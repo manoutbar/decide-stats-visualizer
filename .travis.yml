@@ -19,13 +19,10 @@ script:
 branches:
   only:
   - master
-deploy_staging:
-  stage: deploy
-  type: deploy
+deploy:
+  provider: script
+  skip_cleanup: true
   image: ruby:latest
   script:
-  # workaround https://github.com/travis-ci/dpl/issues/1247
-  - gem install dpl && gem install faraday -v 1.8.0
-  - dpl --provider=heroku --app=decide-stats-visualizer --api-key=$HEROKU_API_KEY
-  except:
-  - schedules
+    - gem install dpl && gem install faraday -v 1.8.0
+    - dpl --provider=heroku --app=decide-stats-visualizer --api-key=$HEROKU_API_KEY
