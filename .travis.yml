@@ -18,9 +18,14 @@ script:
   - npm test
 branches:
   only:
-  - master
-deploy:
-  provider: heroku
-  app: decide-stats-visualizer
-  strategy: git
-  api_key: $HEROKU_API_KEY
+  - manoutbar
+deploy_staging:
+  stage: deploy
+  type: deploy
+  image: ruby:latest
+  script:
+  # workaround https://github.com/travis-ci/dpl/issues/1247
+  - gem install dpl && gem install faraday -v 1.8.0
+  - dpl --provider=heroku --app=decide-stats-visualizer --api-key=$HEROKU_API_KEY
+  except:
+  - schedules
