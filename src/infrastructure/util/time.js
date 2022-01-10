@@ -45,7 +45,6 @@ export default class TimeUtil {
 
   static daysBetweenInterval(start, end) {
     const [startDate, endDate] = dateInstances(start, end);
-    console.log('startDate', start, startDate.toISO(), 'endDate', end, endDate.toISO())
     const interval = fromInterval(startDate, endDate);
     return Array.from(days(interval))
   }
