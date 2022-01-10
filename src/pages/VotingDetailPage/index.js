@@ -95,15 +95,23 @@ export default function VotingDetailPage(props) {
                           </Grid>
                         </Paper>       
                     </Grid>
+
                   ))
                 }
 
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12}>
-          Census and voters data
+        <Grid item xs={12} md={6}>
+          { votingResultCount != null && (
+          <Card style={{marginTop:'10px', backgroundColor:'#fff5e6'}}>
+            <CardContent>               
+             <DoughnutChart {...votingResultCount} title="Número de votos de cada opción" />
+            </CardContent>
+          </Card>
+          )}
         </Grid>
+       
 
       </Grid> )
       : ( /** si no se encuentra:*******************************/

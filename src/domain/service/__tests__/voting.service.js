@@ -2,7 +2,6 @@ import VotingService from "../voting.service";
 import VotingRepository from 'infrastructure/repositories/voting.repository';
 import VOTINGS_SAMPLE_DATA from './votings.json';
 import Voting from 'domain/model/voting.model';
-import votingServiceInstance from "../locator/voting";
 
 jest.mock('infrastructure/repositories/voting.repository');
 
@@ -30,25 +29,13 @@ describe('Voting service tests', () => {
     expect(result[0]).toBeInstanceOf(Voting);
   })
 
-  test('Find votings finished', async () => {
+  test('Find votings by id', async () => {
     const repo = new VotingRepository();
     repo.getVoting.mockReturnValue(new Voting(VOTINGS_SAMPLE_DATA[0]));
 
     const votingService = createInstance(repo);
     
-    const result = await votingService.findAll.FINISHED;
-
-    expect(repo.listVotings).not.toHaveBeenCalled();
-    expect(repo.getVoting).toHaveBeenCalledTimes(1);
-    expect(result).toBeInstanceOf(Voting);
-  })
-  test('Find votings finished', async () => {
-    const repo = new VotingRepository();
-    repo.getVoting.mockReturnValue(new Voting(VOTINGS_SAMPLE_DATA[0]));
-
-    const votingService = createInstance(repo);
-    
-    const result = await votingService.Voting.findAll.
+    const result = await votingService.findById(1);
 
     expect(repo.listVotings).not.toHaveBeenCalled();
     expect(repo.getVoting).toHaveBeenCalledTimes(1);
