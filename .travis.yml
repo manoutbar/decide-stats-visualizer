@@ -10,11 +10,19 @@ cache:
   directories:
     - node_modules
 script:
+  - |
+    touch .env
+    echo REACT_APP_API_ENDPOINT="$API_ENDPOINT" >> .env
+    cat .env
   - npm run build
   - npm test
 branches:
   only:
   - master
+
+before_deploy:
+  - gem install faraday -v 1.8.0
+
 deploy:
   provider: heroku
   app: decide-stats-visualizer
